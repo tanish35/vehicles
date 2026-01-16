@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Vehicle {
+  id                                         String   @id @default(auto()) @map("_id") @db.ObjectId
+  vin                                        String   @unique
+  county                                     String
+  city                                       String
+  state                                      String
+  postal_code                                String
+  model_year                                 Int
+  make                                       String
+  model                                      String
+  electric_vehicle_type                      String
+  clean_alternative_fuel_vehicle_eligibility String
+  electric_range                            Int
+  legislative_district                       String
+  dol_vehicle_id                             String
+  electric_utility                           String
+  census_tract                               String
+  created_at                                 DateTime @default(now())
+  updated_at                                 DateTime @updatedAt
+}
