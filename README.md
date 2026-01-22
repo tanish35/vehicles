@@ -1,36 +1,126 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚗 Vehicle Trends
 
-## Getting Started
+A Next.js application for exploring and analyzing electric vehicle registration data. View trends, search by county, and analyze vehicle statistics with an interactive dashboard.
 
-First, run the development server:
+## 🌐 Live Demo
+
+**[vehicle-trends.vercel.app](https://vehicle-trends.vercel.app)**
+
+## ✨ Features
+
+- **Dashboard Overview** - Summary statistics and charts of vehicle registrations
+- **County Lookup** - Search vehicles by county with pagination
+- **Trends Analysis** - Visualize vehicle registration trends over time
+- **Make/Model Explorer** - Browse vehicles by manufacturer and model
+- **Real-time Data** - Powered by MongoDB with Redis caching for performance
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js 16](https://nextjs.org/) with App Router
+- **Database**: [MongoDB](https://www.mongodb.com/) with [Prisma ORM](https://www.prisma.io/)
+- **Caching**: [Upstash Redis](https://upstash.com/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Charts**: [Recharts](https://recharts.org/)
+- **State Management**: [TanStack Query](https://tanstack.com/query)
+- **Deployment**: [Vercel](https://vercel.com/)
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- pnpm (recommended) or npm/yarn
+- MongoDB database
+- Upstash Redis account
+
+### Installation
+
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/tanish35/vehicles.git
+   cd vehicles
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   pnpm install
+   ```
+
+3. **Set up environment variables**
+
+   Copy the example environment file and fill in your values:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+   Required environment variables:
+
+   | Variable | Description |
+   |----------|-------------|
+   | `DATABASE_URL` | MongoDB connection string |
+   | `UPSTASH_REDIS_REST_URL` | Upstash Redis REST API URL |
+   | `UPSTASH_REDIS_REST_TOKEN` | Upstash Redis REST API token |
+
+4. **Generate Prisma client**
+
+   ```bash
+   pnpm prisma generate
+   ```
+
+5. **Run the development server**
+
+   ```bash
+   pnpm dev
+   ```
+
+6. **Open the app**
+
+   Navigate to [http://localhost:3000](http://localhost:3000) in your browser.
+
+### Production Build
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm build
+pnpm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📁 Project Structure
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+vehicles/
+├── app/                    # Next.js App Router
+│   ├── api/               # API routes
+│   │   └── v1/vehicles/   # Vehicle API endpoints
+│   └── page.tsx           # Home page
+├── components/            # React components
+│   ├── dashboard/         # Dashboard-specific components
+│   └── ui/               # Reusable UI components
+├── lib/                   # Utilities and helpers
+│   ├── api.ts            # API client functions
+│   ├── db.ts             # Prisma database client
+│   ├── redis.ts          # Redis caching utilities
+│   └── types.ts          # TypeScript types
+├── prisma/               # Prisma schema and migrations
+└── public/               # Static assets
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📡 API Endpoints
 
-## Learn More
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/vehicles/summary` | GET | Get summary statistics |
+| `/api/v1/vehicles/trends` | GET | Get trend data over time |
+| `/api/v1/vehicles/analyze` | POST | Analyze vehicle data |
+| `/api/v1/vehicles/county/[name]` | GET | Get vehicles by county |
+| `/api/v1/vehicles/make/[make]/model` | GET | Get models by make |
 
-To learn more about Next.js, take a look at the following resources:
+## 🤝 Contributing
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📄 License
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is open source and available under the [MIT License](LICENSE).
