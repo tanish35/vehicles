@@ -1,8 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import prisma from "@/lib/db";
+import { getValue, setValue } from "@/lib/redis";
 
 export async function GET(req: NextRequest) {
+  const key = "vehicles:summary:overall";
+  const summary = await getValue(key);
+  if (summary) {
+    return NextResponse.json(summary);
+  }
+
   const totalVehicles = await prisma.vehicle.count();
   const BEVCount = await prisma.vehicle.count({
     where: {
@@ -53,6 +60,18 @@ export async function GET(req: NextRequest) {
       },
     },
   });
+  await setValue(
+    key,
+    {
+      totalVehicles,
+      vehicleByType: { BEV: BEVCount, PHEV: PHEVCount },
+      top10Makes,
+      avgElectricRange: avgElectricRange._avg.electric_range,
+      eligibleVehicles,
+      ineligibleVehicles,
+    },
+    600,
+  );
 
   return NextResponse.json({
     totalVehicles,

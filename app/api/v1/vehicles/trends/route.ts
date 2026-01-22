@@ -1,8 +1,14 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 import prisma from "@/lib/db";
+import { getValue, setValue } from "@/lib/redis";
 
 export async function GET() {
+  const cachedData = await getValue("vehicles:trends:byYear");
+  if (cachedData) {
+    return NextResponse.json(cachedData);
+  }
+
   const vehicleCountByYear = await prisma.vehicle.groupBy({
     by: ["model_year"],
     _count: {
@@ -65,6 +71,15 @@ export async function GET() {
       ratio: phevCount === 0 ? null : bevCount / phevCount,
     };
   });
+  await setValue(
+    "vehicles:trends:byYear",
+    {
+      vehicleCountByYear,
+      averageRangeByYear,
+      BEVPHEVRatioByYear,
+    },
+    600,
+  );
 
   return NextResponse.json({
     vehicleCountByYear,

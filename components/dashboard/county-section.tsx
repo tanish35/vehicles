@@ -1,9 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchCountyVehicles } from "@/lib/api";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -29,6 +35,10 @@ export function CountySection() {
     queryFn: () => fetchCountyVehicles(county, page, pageSize),
     enabled: !!county,
   });
+
+  useEffect(() => {
+    console.log("county data:", data);
+  }, [data]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,7 +75,8 @@ export function CountySection() {
 
       {error && (
         <div className="p-4 text-destructive">
-          Failed to fetch county data. Please check the county name and try again.
+          Failed to fetch county data. Please check the county name and try
+          again.
         </div>
       )}
 
@@ -98,11 +109,21 @@ export function CountySection() {
                       {data.vehicles.map((vehicle) => (
                         <TableRow key={vehicle.id}>
                           <TableCell>{vehicle.model_year}</TableCell>
-                          <TableCell className="font-medium">{vehicle.make}</TableCell>
+                          <TableCell className="font-medium">
+                            {vehicle.make}
+                          </TableCell>
                           <TableCell>{vehicle.model}</TableCell>
                           <TableCell>
-                            <Badge variant={vehicle.electric_vehicle_type.includes("BEV") ? "default" : "secondary"}>
-                              {vehicle.electric_vehicle_type.includes("BEV") ? "BEV" : "PHEV"}
+                            <Badge
+                              variant={
+                                vehicle.electric_vehicle_type.includes("BEV")
+                                  ? "default"
+                                  : "secondary"
+                              }
+                            >
+                              {vehicle.electric_vehicle_type.includes("BEV")
+                                ? "BEV"
+                                : "PHEV"}
                             </Badge>
                           </TableCell>
                           <TableCell>{vehicle.electric_range} mi</TableCell>

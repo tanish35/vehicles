@@ -1,5 +1,3 @@
-// API Response Types
-
 export interface SummaryResponse {
   totalVehicles: number;
   vehicleByType: {
@@ -47,7 +45,11 @@ export interface AnalyzeRequest {
 export interface AnalyzeResponse {
   groupBy: string;
   data: Array<{
-    [key: string]: string | number | { _all: number } | { electric_range: number | null };
+    [key: string]:
+      | string
+      | number
+      | { _all: number }
+      | { electric_range: number | null };
     _count: { _all: number };
     _avg: { electric_range: number | null };
   }>;

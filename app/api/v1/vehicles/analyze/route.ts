@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import prisma from "@/lib/db";
+import { getValue, setValue } from "@/lib/redis";
 
 interface VehicleRequestBody {
   filters?: {
@@ -33,7 +34,16 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  const groupedData = await prisma.vehicle.groupBy({
+  let groupedData = null;
+  const cacheKey = `vehicle_analysis:${JSON.stringify(
+    whereClause,
+  )}:groupBy:${groupBy}`;
+  const cachedData = await getValue(cacheKey);
+  if (cachedData) {
+    return NextResponse.json({ groupBy, data: cachedData });
+  }
+
+  groupedData = await prisma.vehicle.groupBy({
     by: [groupBy],
     where: whereClause,
     _count: {
@@ -43,5 +53,6 @@ export async function POST(req: NextRequest) {
       electric_range: true,
     },
   });
+  await setValue(cacheKey, groupedData, 600);
   return NextResponse.json({ groupBy, data: groupedData });
 }
