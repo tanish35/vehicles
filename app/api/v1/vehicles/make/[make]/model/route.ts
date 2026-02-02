@@ -10,7 +10,7 @@ export async function GET(
   const { make } = await params;
   const cachedData = await getValue(`vehicles:make:${make}:models`);
   if (cachedData) {
-    return NextResponse.json({ make, models:cachedData });
+    return NextResponse.json({ make, models: cachedData });
   }
   const models = await prisma.vehicle.groupBy({
     by: ["model"],
